@@ -1,0 +1,22 @@
+{
+  "name": "web3-event-manager",
+  "version": "1.0.0",
+  "description": "An event emitter class to provide callbacks when the web3 object changes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "events",
+    "event-emitter",
+    "web3",
+    "ethereum",
+    "javascript"
+  ],
+  "author": "jon schwartz <jpschwartz2@uwalumni.com>",
+  "license": "ISC",
+  "dependencies": {
+    "events": "^2.0.0",
+    "web3": "^1.0.0-beta.34"
+  }
+}
