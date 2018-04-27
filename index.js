@@ -25,7 +25,10 @@ export default class web3Manager extends EventEmitter {
 
     if (web3){
       // dispatches an action if a web3 instance was recently created
-      if (!this.web3) this.emit('hasWeb3', web3);
+      if (!this.web3) {
+        this.web3 = web3;
+        this.emit('hasWeb3', web3);
+      }
 
       /* ---------- ensures the user is on the right network ----------- */
       // const currentNetworkId = Number(web3.version.network);
