@@ -29,7 +29,7 @@ Further descriptions can be found below the table.
 | Event       | Data          |
 |:------------|--------------|
 |`web3Change` | { data: { hasWeb3: bool, web3: web3Obj } } |
-|`accountChange` | { data: { unlockedAccount: bool, account: address || null> } } |
+|`accountChange` | { data: { unlockedAccount: bool, account: address or null } } |
 |`networkChange` | { data: { currentNetworkId: num, onCorrectNetwork: bool } } |
 
 _web3Change:_
