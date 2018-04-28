@@ -1,6 +1,6 @@
 {
   "name": "web3-event-manager",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "An event emitter class to provide callbacks when the web3 object changes",
   "main": "index.js",
   "scripts": {
