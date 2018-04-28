@@ -34,7 +34,7 @@ export default class web3Manager extends EventEmitter {
       }
 
       /* ---------- ensures the user is on the right network ----------- */
-      const currentNetworkId = await Number(web3.eth.net.getId());
+      const currentNetworkId = await web3.eth.net.getId();
 
       // if component received a validNetwork prop, we make sure the user is on the valid network
       const onCorrectNetwork = this.requiredNetwork ?
