@@ -1,6 +1,5 @@
 import EventEmitter from 'events';
-import Web3 from 'web3';
-import getWeb3FromWindow from './utils'
+import { getWeb3FromWindow } from './utils';
 
 export default class web3Manager extends EventEmitter {
   constructor(interval, requiredNetwork, localProvider){
@@ -20,7 +19,7 @@ export default class web3Manager extends EventEmitter {
     clearInterval(this.intervalID);
   }
   async fetchWeb3Data (){
-    const web3 = getWeb3FromWindow();
+    const web3 = getWeb3FromWindow(this.localProvider);
     /* --  we only dispatch actions if anything important CHANGED -- */
 
     if (web3){
@@ -28,8 +27,7 @@ export default class web3Manager extends EventEmitter {
       if (!this.web3) {
         this.web3 = web3;
         const eventData = {
-          hasWeb3: true,
-          data: web3,
+          data: { hasWeb3: true, web3 }
         }
         this.emit('web3Change', eventData);
       }
@@ -51,7 +49,7 @@ export default class web3Manager extends EventEmitter {
 
       /* ------------- checks for unlocked account change -------------- */
       const [ account ] = await web3.eth.getAccounts();
-      const hasUnlockedAccount = !!account;
+      const unlockedAccount = !!account;
       const recentlyChangedAccount = account && account !== this.account;
       const recentlyLoggedOut = !account && this.account;
 
@@ -59,8 +57,7 @@ export default class web3Manager extends EventEmitter {
       if (recentlyChangedAccount || recentlyLoggedOut) {
         this.account = account;
         const eventData = {
-          hasUnlockedAccount,
-          data: account,
+          data: { unlockedAccount, account }
         }
         this.emit('accountChange', eventData);
       }

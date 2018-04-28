@@ -1,7 +1,9 @@
-export function  getWeb3FromWindow(){
+import Web3 from 'web3';
+
+export function  getWeb3FromWindow(localProvider){
   let { web3 } = window;
-  if (this.localProvider) {
-    const provider = new Web3.providers.HttpProvider(this.localProvider);
+  if (localProvider) {
+    const provider = new Web3.providers.HttpProvider(localProvider);
     web3 = new Web3(provider);
     return web3;
   }
