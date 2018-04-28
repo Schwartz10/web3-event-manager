@@ -1,5 +1,7 @@
 A class that extends node.js `events` to create custom event listeners for apps relying on web3
 
+github: https://github.com/Schwartz10/web3-event-manager
+
 ### Configuration:
 
 `npm install web3-event-manager`
@@ -8,7 +10,7 @@ Wherever you require web3-event-manager, create a new instance of the class:
 
 ```js
 import Web3Manager from 'web3-event-manager'
-const web3EventManager = new Web3Manager();
+const web3EventManager = new Web3Manager()
 ```
 
 When you want the web3EventManager to start listening for changes, run:
@@ -26,26 +28,32 @@ Further descriptions can be found below the table.
 
 | Event       | Data          |
 |:------------|--------------|
-|`web3Change` | { data: { hasWeb3: <bool>, web3: <web3Obj> } } |
-|`accountChange` | { data: { unlockedAccount: <bool>, account: <address || null> } } |
-|`networkChange` | { data: { currentNetworkId: <num>, onCorrectNetwork: <bool> } } |
+|`web3Change` | { data: { hasWeb3: bool, web3: web3Obj } } |
+|`accountChange` | { data: { unlockedAccount: bool, account: address || null> } } |
+|`networkChange` | { data: { currentNetworkId: num, onCorrectNetwork: bool } } |
 
 _web3Change:_
 `web3EventManager.on('web3Change', callback)`
+
 Will fire the callback with a boolean if the user has a web3 object in their browser. The web3 object is accessible via the data object.
 To stop listening, call:
+
 `web3EventManager.removeListener('web3Change', callback)`
 
 _accountChange:_
 `web3EventManager.on('accountChange', callback)`
+
 Will fire the callback with a boolean if the user has an unlocked ethereum account. The unlocked account's address is also provided in the data object.
 To stop listening, call:
+
 `web3EventManager.removeListener('accountChange', callback)`
 
 _networkChange:_
 `web3EventManager.on('networkChange', callback)`
+
 Will fire the callback with a number representing the networkId of the network protocol the web3 object corresponds to. If the Web3EventManager was constructed with a required network (see Web3EventManager arguments), the data returned will provide a boolean if the user is on the required network (and true if no required network was provided).
 To stop listening, call:
+
 `web3EventManager.removeListener('networkChange', callback)`
 
 ### Instantiating the Web3Manager with arguments:
