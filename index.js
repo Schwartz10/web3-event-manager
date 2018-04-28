@@ -6,7 +6,8 @@ export default class web3Manager extends EventEmitter {
     super();
     this.web3 = null;
     this.account = null;
-    this.validNetwork = false;
+    this.currentNetworkId = null;
+    this.onCorrectNetwork = false;
     this.requiredNetwork = requiredNetwork || null;
     this.interval = interval || 500;
     this.localProvider = localProvider || null;
@@ -33,18 +34,22 @@ export default class web3Manager extends EventEmitter {
       }
 
       /* ---------- ensures the user is on the right network ----------- */
-      const currentNetworkId = Number(web3.version.network);
+      const currentNetworkId = await Number(web3.eth.net.getId());
 
       // if component received a validNetwork prop, we make sure the user is on the valid network
       const onCorrectNetwork = this.requiredNetwork ?
       this.requiredNetwork === currentNetworkId : true;
 
       // valid network refers to the previous bool value kept on redux store
-      const changedToValidNetwork = onCorrectNetwork && !this.validNetwork;
+      const changedNetwork = currentNetworkId !== this.currentNetworkId;
 
-      if (changedToValidNetwork) {
-        this.validNetwork = true;
-        this.emit('networkChange', true);
+      if (changedNetwork) {
+        this.onCorrectNetwork = onCorrectNetwork;
+        this.currentNetworkId = currentNetworkId;
+        const eventData = {
+          data: { currentNetworkId, onCorrectNetwork }
+        }
+        this.emit('networkChange', eventData);
       }
 
       /* ------------- checks for unlocked account change -------------- */
