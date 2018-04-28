@@ -58,10 +58,10 @@ To stop listening, call:
 
 ### Instantiating the Web3Manager with arguments:
 
-The Web3Manager currently takes 3 optional arguments:
-(1) interval (number) - instructs the Web3Manager to check for updates every (number) of milliseconds
-(2) requiredNetwork (number) - tells the Web3Manager that the user must be connected to a requiredNetwork
-(3) localProvider (string (localhost...)) - instructs the Web3Manager to construct the web3 object out of the localProvider, instead of the current provider injected into the browser by metamask, mist, or other related services.
+The Web3Manager currently takes 3 optional arguments:<br><br>
+(1) interval (number) - instructs the Web3Manager to check for updates every (number) of milliseconds<br>
+(2) requiredNetwork (number) - tells the Web3Manager that the user must be connected to a requiredNetwork<br>
+(3) localProvider (string (localhost...)) - instructs the Web3Manager to construct the web3 object out of the localProvider, instead of the current provider injected into the browser by metamask, mist, or other related services.<br>
 
 If you wish to use these, simply call:
 
