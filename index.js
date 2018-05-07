@@ -1,7 +1,7 @@
-import EventEmitter from 'events';
-import { getWeb3FromWindow } from './utils';
+const EventEmitter = require('events');
+const { getWeb3FromWindow } = require('./utils');
 
-export default class web3Manager extends EventEmitter {
+module.exports = class web3Manager extends EventEmitter {
   constructor(interval, requiredNetwork, localProvider){
     super();
     this.web3 = null;
@@ -19,7 +19,7 @@ export default class web3Manager extends EventEmitter {
   stop(){
     clearInterval(this.intervalID);
   }
-  async fetchWeb3Data (){
+  fetchWeb3Data (){
     const web3 = getWeb3FromWindow(this.localProvider);
     /* --  we only dispatch actions if anything important CHANGED -- */
 
@@ -34,38 +34,46 @@ export default class web3Manager extends EventEmitter {
       }
 
       /* ---------- ensures the user is on the right network ----------- */
-      const currentNetworkId = await web3.eth.net.getId();
+      let currentNetworkId;
+      return web3.eth.net.getId().then(id => {
+        currentNetworkId = id
+        // if component received a validNetwork prop, we make sure the user is on the valid network
+        const onCorrectNetwork = this.requiredNetwork ?
+        this.requiredNetwork === currentNetworkId : true;
 
-      // if component received a validNetwork prop, we make sure the user is on the valid network
-      const onCorrectNetwork = this.requiredNetwork ?
-      this.requiredNetwork === currentNetworkId : true;
+        // valid network refers to the previous bool value kept on redux store
+        const changedNetwork = currentNetworkId !== this.currentNetworkId;
 
-      // valid network refers to the previous bool value kept on redux store
-      const changedNetwork = currentNetworkId !== this.currentNetworkId;
-
-      if (changedNetwork) {
-        this.onCorrectNetwork = onCorrectNetwork;
-        this.currentNetworkId = currentNetworkId;
-        const eventData = {
-          data: { currentNetworkId, onCorrectNetwork }
+        if (changedNetwork) {
+          this.onCorrectNetwork = onCorrectNetwork;
+          this.currentNetworkId = currentNetworkId;
+          const eventData = {
+            data: { currentNetworkId, onCorrectNetwork }
+          }
+          this.emit('networkChange', eventData);
         }
-        this.emit('networkChange', eventData);
-      }
 
-      /* ------------- checks for unlocked account change -------------- */
-      const [ account ] = await web3.eth.getAccounts();
-      const unlockedAccount = !!account;
-      const recentlyChangedAccount = account && account !== this.account;
-      const recentlyLoggedOut = !account && this.account;
+        return web3.eth.getAccounts();
+      })
+      .then(([ account ]) => {
+        /* ------------- checks for unlocked account change -------------- */
+        const unlockedAccount = !!account;
+        const recentlyChangedAccount = account && account !== this.account;
+        const recentlyLoggedOut = !account && this.account;
 
-      // if an important account changed, dispatch the appropriate action
-      if (recentlyChangedAccount || recentlyLoggedOut) {
-        this.account = account;
-        const eventData = {
-          data: { unlockedAccount, account }
+        // if an important account changed, dispatch the appropriate action
+        if (recentlyChangedAccount || recentlyLoggedOut) {
+          this.account = account;
+          const eventData = {
+            data: { unlockedAccount, account }
+          }
+          this.emit('accountChange', eventData);
         }
-        this.emit('accountChange', eventData);
-      }
+      })
+    }
+    else {
+      // return a promise so we don't have errors where its required
+      return Promise.resolve(undefined)
     }
   }
 }

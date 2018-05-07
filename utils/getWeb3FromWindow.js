@@ -1,6 +1,6 @@
-import Web3 from 'web3';
+const Web3 = require( 'web3');
 
-export function  getWeb3FromWindow(localProvider){
+module.exports = {getWeb3FromWindow: function getWeb3FromWindow(localProvider){
   let { web3 } = window;
   if (localProvider) {
     const provider = new Web3.providers.HttpProvider(localProvider);
@@ -16,4 +16,5 @@ export function  getWeb3FromWindow(localProvider){
   else {
     return null;
   }
+}
 }
